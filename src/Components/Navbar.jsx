@@ -39,7 +39,7 @@ export default function Navbar() {
                     </div>
                 </div>
             </div>
-            <header id="header" className={`header d-flex align-items-center fixed-top ${showMenu ? 'mobile-nav-active' : ''}`}>
+            <header id="header" className={`header d-flex align-items-center ${showMenu ? 'mobile-nav-active' : ''}`}>
                 <div className="container-fluid container-xl position-relative d-flex align-items-center">
 
                     <Link to="/" className="logo d-flex align-items-center me-auto">
@@ -55,6 +55,7 @@ export default function Navbar() {
                             <li><Link to="/testimonial">Testimonial</Link></li>
                             <li><Link to="/faq">Faq</Link></li>
                             <li><Link to="/contact">Contact</Link></li>
+                            <li><Link to="/admin">Admin</Link></li>
                             <li className="dropdown"><a href="#"><span>Nitin Chahan</span> <i className="bi bi-chevron-down toggle-dropdown"></i></a>
                                 <ul>
                                     <li><Link to="/profile?choice=Profile">Profile</Link></li>

@@ -14,6 +14,9 @@ import FaqPage from './Pages/FaqPage'
 import ContactUsPage from './Pages/ContactUsPage'
 import PrivacyPolicy from './Pages/PrivacyPolicy'
 import TermsAndCondition from './Pages/TermsAndCondition'
+import AdminHomePage from './Pages/Admin/AdminHomePage'
+import AdminMaincategoryPage from './Pages/Admin/Maincategory/AdminMaincategoryPage'
+import AdminMaincategoryCreatePage from './Pages/Admin/Maincategory/AdminMaincategoryCreatePage copy'
 
 export default function App() {
   return (
@@ -29,6 +32,13 @@ export default function App() {
         <Route path="/contact" element={<ContactUsPage />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/tc" element={<TermsAndCondition />} />
+
+
+        {/* Admin Routes */}
+        <Route path="/admin" element={<AdminHomePage />} />
+
+        <Route path="/admin/maincategory" element={<AdminMaincategoryPage />} />
+        <Route path="/admin/maincategory/create" element={<AdminMaincategoryCreatePage />} />
       </Routes>
       <Footer />
     </BrowserRouter>
