@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+
+import DataTable from 'datatables.net-dt'
+import "datatables.net-dt/css/dataTables.dataTables.min.css"
+
 import Breadcrum from '../../../Components/Breadcrum'
 import AdminSidebar from '../../../Components/Admin/AdminSidebar'
 import Profile from '../../../Components/User/Profile'
-import { Link } from 'react-router-dom'
+
 
 export default function AdminMaincategoryPage() {
   let [data, setData] = useState([])
@@ -22,7 +27,7 @@ export default function AdminMaincategoryPage() {
   }
 
   useEffect(() => {
-    (async () => {
+    let time = (async () => {
       let response = await fetch(`${import.meta.env.VITE_APP_BACKEND_SERVER}/maincategory`, {
         method: "GET",
         headers: {
@@ -32,7 +37,9 @@ export default function AdminMaincategoryPage() {
       response = await response.json()
       setMaincategoryStateData(response)
       setData(response)
+      return setTimeout(() => new DataTable('#myTable'), [500])
     })()
+    return () => clearTimeout(time)
   }, [])
   return (
     <>
@@ -46,7 +53,7 @@ export default function AdminMaincategoryPage() {
           <div className="col-md-9">
             <h5 className='my-dark-background p-2 text-light text-center'>Maincategory <Link to="/admin/maincategory/create"><i className='bi bi-plus text-light float-end'></i></Link></h5>
             <div className="table-responsive">
-              <table className='table table-bordered'>
+              <table id='myTable' className='table table-bordered'>
                 <thead>
                   <tr>
                     <th>Id</th>
@@ -67,9 +74,9 @@ export default function AdminMaincategoryPage() {
                           <img src={`${import.meta.env.VITE_APP_IMAGE_SERVER}${item.pic}`} height={60} width={80} alt="Maincategory Image" />
                         </Link>
                       </td>
-                      <td>{item.status?'Active':"Inactive"}</td>
-                      <td><Link to={`/admin/maincategory/${item.id}`} className='btn btn-primary'><i className='bi bi-pencil'></i></Link></td>
-                      <td><button className='btn btn-danger' onClick={()=>deleteRecord(item.id)}><i className='bi bi-x'></i></button></td>
+                      <td>{item.status ? 'Active' : "Inactive"}</td>
+                      <td><Link to={`/admin/maincategory/update/${item.id}`} className='btn btn-primary'><i className='bi bi-pencil'></i></Link></td>
+                      <td><button className='btn btn-danger' onClick={() => deleteRecord(item.id)}><i className='bi bi-x'></i></button></td>
                     </tr>
                   })}
                 </tbody>

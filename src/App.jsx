@@ -17,6 +17,7 @@ import TermsAndCondition from './Pages/TermsAndCondition'
 import AdminHomePage from './Pages/Admin/AdminHomePage'
 import AdminMaincategoryPage from './Pages/Admin/Maincategory/AdminMaincategoryPage'
 import AdminMaincategoryCreatePage from './Pages/Admin/Maincategory/AdminMaincategoryCreatePage copy'
+import AdminMaincategoryUpdatePage from './Pages/Admin/Maincategory/AdminMaincategoryUpdatePage'
 
 export default function App() {
   return (
@@ -39,6 +40,7 @@ export default function App() {
 
         <Route path="/admin/maincategory" element={<AdminMaincategoryPage />} />
         <Route path="/admin/maincategory/create" element={<AdminMaincategoryCreatePage />} />
+        <Route path="/admin/maincategory/update/:id" element={<AdminMaincategoryUpdatePage />} />
       </Routes>
       <Footer />
     </BrowserRouter>
