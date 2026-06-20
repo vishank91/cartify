@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 
 import Breadcrum from '../../../Components/Breadcrum'
@@ -7,6 +8,8 @@ import Profile from '../../../Components/User/Profile'
 
 import TextValidator from '../../../FormValidators/TextValidator'
 import ImageValidator from '../../../FormValidators/ImageValidator'
+
+import { createMaincategory, getMaincategory } from '../../../Redux/ActionCreators/MaincategoryActionCreators'
 export default function AdminMaincategoryCreatePage() {
   let [data, setData] = useState({
     name: "",
@@ -23,7 +26,8 @@ export default function AdminMaincategoryCreatePage() {
 
   let navigate = useNavigate()
 
-  let [MaincategoryStateData, setMaincategoryStateData] = useState([])
+  let MaincategoryStateData = useSelector(state => state.MaincategoryStateData)
+  let dispatch = useDispatch()
 
   function getInputData(e) {
     let name = e.target.name
@@ -32,7 +36,7 @@ export default function AdminMaincategoryCreatePage() {
     setData({ ...data, [name]: name === "status" ? value === "1" ? true : false : value })
     setErrorMessage({ ...errorMessage, [name]: name === "pic" ? ImageValidator(e) : TextValidator(e) })
   }
-  async function postData(e) {
+  function postData(e) {
     e.preventDefault()
     let error = Object.values(errorMessage).find(x => x !== "")
     if (error)
@@ -44,29 +48,22 @@ export default function AdminMaincategoryCreatePage() {
         setShow(true)
         return
       }
-      let response = await fetch(`${import.meta.env.VITE_APP_BACKEND_SERVER}/maincategory`, {
-        method: "POST",
-        headers: {
-          "content-type": "appliation/json"
-        },
-        body: JSON.stringify({ ...data })
-      })
-      response = await response.json()
+
+      // let formData = new FormData()
+      // formData.append("name",data.name)
+      // formData.append("pic",data.pic)
+      // formData.append("status",data.status)
+      // dispatch(createMaincategory(formData))
+
+      dispatch(createMaincategory({ ...data }))
       navigate("/admin/maincategory")
     }
   }
   useEffect(() => {
-    (async () => {
-      let response = await fetch(`${import.meta.env.VITE_APP_BACKEND_SERVER}/maincategory`, {
-        method: "GET",
-        headers: {
-          "content-type": "appliation/json"
-        }
-      })
-      response = await response.json()
-      setMaincategoryStateData(response)
+    (() => {
+      dispatch(getMaincategory())
     })()
-  }, [])
+  }, [MaincategoryStateData.length])
   return (
     <>
       <Breadcrum title="Admin" />

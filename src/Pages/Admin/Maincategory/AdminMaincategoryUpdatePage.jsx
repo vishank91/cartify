@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 
 import Breadcrum from '../../../Components/Breadcrum'
@@ -7,6 +8,8 @@ import Profile from '../../../Components/User/Profile'
 
 import TextValidator from '../../../FormValidators/TextValidator'
 import ImageValidator from '../../../FormValidators/ImageValidator'
+
+import { updateMaincategory, getMaincategory } from '../../../Redux/ActionCreators/MaincategoryActionCreators'
 export default function AdminMaincategoryUpdatePage() {
   let { id } = useParams()
   let [data, setData] = useState({
@@ -24,7 +27,8 @@ export default function AdminMaincategoryUpdatePage() {
 
   let navigate = useNavigate()
 
-  let [MaincategoryStateData, setMaincategoryStateData] = useState([])
+  let MaincategoryStateData = useSelector(state => state.MaincategoryStateData)
+  let dispatch = useDispatch()
 
   function getInputData(e) {
     let name = e.target.name
@@ -33,7 +37,7 @@ export default function AdminMaincategoryUpdatePage() {
     setData({ ...data, [name]: name === "status" ? value === "1" ? true : false : value })
     setErrorMessage({ ...errorMessage, [name]: name === "pic" ? ImageValidator(e) : TextValidator(e) })
   }
-  async function postData(e) {
+  function postData(e) {
     e.preventDefault()
     let error = Object.values(errorMessage).find(x => x !== "")
     if (error)
@@ -45,35 +49,29 @@ export default function AdminMaincategoryUpdatePage() {
         setShow(true)
         return
       }
-      let response = await fetch(`${import.meta.env.VITE_APP_BACKEND_SERVER}/maincategory/${id}`, {
-        method: "PUT",
-        headers: {
-          "content-type": "appliation/json"
-        },
-        body: JSON.stringify({ ...data })
-      })
-      response = await response.json()
+      // let formData = new FormData()
+      // formData.append("id",data.id)
+      // formData.append("name",data.name)
+      // formData.append("pic",data.pic)
+      // formData.append("status",data.status)
+      // dispatch(updateMaincategory(formData))
+
+      dispatch(updateMaincategory({ ...data }))
       navigate("/admin/maincategory")
     }
   }
   useEffect(() => {
-    (async () => {
-      let response = await fetch(`${import.meta.env.VITE_APP_BACKEND_SERVER}/maincategory`, {
-        method: "GET",
-        headers: {
-          "content-type": "appliation/json"
-        }
-      })
-      response = await response.json()
-      let item = response.find(x => x.id === id)
-      if (item) {
-        setData({ ...data, ...item })
+    (() => {
+      dispatch(getMaincategory())
+      if (MaincategoryStateData.length) {
+        let item = MaincategoryStateData.find(x => x.id === id)
+        if (item)
+          setData({ ...data, ...item })
+        else
+          navigate("/admin/maincategory")
       }
-      else
-        navigate("/admin/maincategory")
-      setMaincategoryStateData(response)
     })()
-  }, [])
+  }, [MaincategoryStateData.length])
   return (
     <>
       <Breadcrum title="Admin" />
@@ -102,7 +100,7 @@ export default function AdminMaincategoryUpdatePage() {
 
                 <div className="col-md-6 mb-3">
                   <label>Status</label>
-                  <select name="status" value={data.status?"1":"0"} className='form-select border-dark' onChange={getInputData}>
+                  <select name="status" value={data.status ? "1" : "0"} className='form-select border-dark' onChange={getInputData}>
                     <option value="1">Active</option>
                     <option value="0">Inactive</option>
                   </select>

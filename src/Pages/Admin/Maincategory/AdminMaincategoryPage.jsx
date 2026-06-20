@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import DataTable from 'datatables.net-dt'
@@ -8,39 +9,31 @@ import Breadcrum from '../../../Components/Breadcrum'
 import AdminSidebar from '../../../Components/Admin/AdminSidebar'
 import Profile from '../../../Components/User/Profile'
 
-
+import { getMaincategory, deleteMaincategory } from "../../../Redux/ActionCreators/MaincategoryActionCreators"
 export default function AdminMaincategoryPage() {
   let [data, setData] = useState([])
-  let [MaincategoryStateData, setMaincategoryStateData] = useState([])
 
-  async function deleteRecord(id) {
+  let MaincategoryStateData = useSelector(state => state.MaincategoryStateData)
+  let dispatch = useDispatch()
+
+
+  function deleteRecord(id) {
     if (window.confirm("Are You Sure To Delete That Record : ")) {
-      let response = await fetch(`${import.meta.env.VITE_APP_BACKEND_SERVER}/maincategory/${id}`, {
-        method: "DELETE",
-        headers: {
-          "content-type": "appliation/json"
-        }
-      })
-      response = await response.json()
+      dispatch(deleteMaincategory({ id: id }))
       setData(data.filter(x => x.id !== id))
     }
   }
 
   useEffect(() => {
-    let time = (async () => {
-      let response = await fetch(`${import.meta.env.VITE_APP_BACKEND_SERVER}/maincategory`, {
-        method: "GET",
-        headers: {
-          "content-type": "appliation/json"
-        }
-      })
-      response = await response.json()
-      setMaincategoryStateData(response)
-      setData(response)
-      return setTimeout(() => new DataTable('#myTable'), [500])
+    let time = (() => {
+      dispatch(getMaincategory())
+      if (MaincategoryStateData.length) {
+        setData(MaincategoryStateData)
+        return setTimeout(() => new DataTable('#myTable'), [500])
+      }
     })()
     return () => clearTimeout(time)
-  }, [])
+  }, [MaincategoryStateData.length])
   return (
     <>
       <Breadcrum title="Admin" />
