@@ -9,8 +9,8 @@ import Profile from '../../../Components/User/Profile'
 import TextValidator from '../../../FormValidators/TextValidator'
 import ImageValidator from '../../../FormValidators/ImageValidator'
 
-import { updateMaincategory, getMaincategory } from '../../../Redux/ActionCreators/MaincategoryActionCreators'
-export default function AdminMaincategoryUpdatePage() {
+import { updateSubcategory, getSubcategory } from '../../../Redux/ActionCreators/SubcategoryActionCreators'
+export default function AdminSubcategoryUpdatePage() {
   let { id } = useParams()
   let [data, setData] = useState({
     name: "",
@@ -27,12 +27,12 @@ export default function AdminMaincategoryUpdatePage() {
 
   let navigate = useNavigate()
 
-  let MaincategoryStateData = useSelector(state => state.MaincategoryStateData)
+  let SubcategoryStateData = useSelector(state => state.SubcategoryStateData)
   let dispatch = useDispatch()
 
   function getInputData(e) {
     let name = e.target.name
-    let value = name === "pic" ? "maincategory/" + e.target.files[0].name : e.target.value
+    let value = name === "pic" ? "subcategory/" + e.target.files[0].name : e.target.value
     // let value = name === "pic" ? e.target.files[0] : e.target.value
     setData({ ...data, [name]: name === "status" ? value === "1" ? true : false : value })
     setErrorMessage({ ...errorMessage, [name]: name === "pic" ? ImageValidator(e) : TextValidator(e) })
@@ -43,9 +43,9 @@ export default function AdminMaincategoryUpdatePage() {
     if (error)
       setShow(true)
     else {
-      let item = MaincategoryStateData.find(x => x.id !== id && x.name?.toLocaleLowerCase() === data.name?.toLocaleLowerCase())
+      let item = SubcategoryStateData.find(x => x.id !== id && x.name?.toLocaleLowerCase() === data.name?.toLocaleLowerCase())
       if (item) {
-        setErrorMessage({ ...errorMessage, name: 'Maincategory With This Name is Already Exist' })
+        setErrorMessage({ ...errorMessage, name: 'Subcategory With This Name is Already Exist' })
         setShow(true)
         return
       }
@@ -54,24 +54,24 @@ export default function AdminMaincategoryUpdatePage() {
       // formData.append("name",data.name)
       // formData.append("pic",data.pic)
       // formData.append("status",data.status)
-      // dispatch(updateMaincategory(formData))
+      // dispatch(updateSubcategory(formData))
 
-      dispatch(updateMaincategory({ ...data }))
-      navigate("/admin/maincategory")
+      dispatch(updateSubcategory({ ...data }))
+      navigate("/admin/subcategory")
     }
   }
   useEffect(() => {
     (() => {
-      dispatch(getMaincategory())
-      if (MaincategoryStateData.length) {
-        let item = MaincategoryStateData.find(x => x.id === id)
+      dispatch(getSubcategory())
+      if (SubcategoryStateData.length) {
+        let item = SubcategoryStateData.find(x => x.id === id)
         if (item)
           setData({ ...data, ...item })
         else
-          navigate("/admin/maincategory")
+          navigate("/admin/subcategory")
       }
     })()
-  }, [MaincategoryStateData.length])
+  }, [SubcategoryStateData.length])
   return (
     <>
       <Breadcrum title="Admin" />
@@ -82,13 +82,13 @@ export default function AdminMaincategoryUpdatePage() {
             <AdminSidebar />
           </div>
           <div className="col-md-9">
-            <h5 className='my-dark-background p-2 text-light text-center'>Update Maincategory <Link to="/admin/maincategory"><i className='bi bi-arrow-left text-light float-end'></i></Link></h5>
+            <h5 className='my-dark-background p-2 text-light text-center'>Update Subcategory <Link to="/admin/subcategory"><i className='bi bi-arrow-left text-light float-end'></i></Link></h5>
             <form onSubmit={postData}>
               <div className="row">
 
                 <div className="col-12 mb-3">
                   <label>Name*</label>
-                  <input type="text" name="name" value={data.name} onChange={getInputData} placeholder='Maincategory Name' className={`form-control ${show && errorMessage.name ? 'border-danger' : 'border-dark'}`} />
+                  <input type="text" name="name" value={data.name} onChange={getInputData} placeholder='Subcategory Name' className={`form-control ${show && errorMessage.name ? 'border-danger' : 'border-dark'}`} />
                   {show && errorMessage.name ? <p className='text-capitalize text-danger'>{errorMessage.name}</p> : null}
                 </div>
 

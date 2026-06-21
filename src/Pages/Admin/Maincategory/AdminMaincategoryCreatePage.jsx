@@ -80,7 +80,7 @@ export default function AdminMaincategoryCreatePage() {
 
                 <div className="col-12 mb-3">
                   <label>Name*</label>
-                  <input type="text" name="name" onChange={getInputData} placeholder='Product Name' className={`form-control ${show && errorMessage.name ? 'border-danger' : 'border-dark'}`} />
+                  <input type="text" name="name" onChange={getInputData} placeholder='Maincategory Name' className={`form-control ${show && errorMessage.name ? 'border-danger' : 'border-dark'}`} />
                   {show && errorMessage.name ? <p className='text-capitalize text-danger'>{errorMessage.name}</p> : null}
                 </div>
 
