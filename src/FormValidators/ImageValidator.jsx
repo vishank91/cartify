@@ -9,6 +9,13 @@ export default function ImageValidator(e) {
             return ""
     }
     else {
-        return ""
+        let errorMessage = []
+        Array.from(e.target.files).forEach((pic, index) => {
+            if (!["image/jpeg", "image/jpg", "image/png", "image/gif", "image/webp"].includes(pic.type))
+                errorMessage.push(`Invalid Pic${index + 1}, Please Upload an Image of Type .jpeg, .jpg,.png,.gif,.webp`)
+            else if (pic.size > 1048576)
+                errorMessage.push(`Pic${index + 1} is Too Heavy, Please Upload an Image Upto 1MB`)
+        })
+        return errorMessage.length === 0 ? "" : errorMessage.join("|")
     }
 }

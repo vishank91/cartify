@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 
@@ -13,7 +13,12 @@ import { createProduct } from '../../../Redux/ActionCreators/ProductActionCreato
 import { getMaincategory } from '../../../Redux/ActionCreators/MaincategoryActionCreators'
 import { getSubcategory } from '../../../Redux/ActionCreators/SubcategoryActionCreators'
 import { getBrand } from '../../../Redux/ActionCreators/BrandActionCreators'
+
+const colors = ["White", "Black", "Blue", "Red", "Green", "Pink", "Yellow", "Gray", "Purple", "Magenta", "Skyblue", "N/A"]
+const sizes = ["XXXL", "XXL", "XL", "LG", "MD", "SM", "XS", "NB", "24", "26", "28", "30", "32", "34", "36", "38", "40", "N/A"]
+let rte
 export default function AdminProductCreatePage() {
+  let refdiv = useRef()
   let [data, setData] = useState({
     name: "",
     maincategory: "",
@@ -34,9 +39,9 @@ export default function AdminProductCreatePage() {
     name: "Name Field is Mendatory",
     basePrice: "Base Price Field is Mendatory",
     discount: "Discount Field is Mendatory",
-    color: "Color Field Field is Mendatory",
-    size: "Size Field Field is Mendatory",
-    StockQuantity: "Stock Quantity Field is Mendatory",
+    color: "Please Select Atleast One Color",
+    size: "Please Select Atleast One Size",
+    stockQuantity: "Stock Quantity Field is Mendatory",
     pic: "Pic Field is Mendatory"
   })
 
@@ -49,12 +54,23 @@ export default function AdminProductCreatePage() {
   let BrandStateData = useSelector(state => state.BrandStateData)
   let dispatch = useDispatch()
 
+  function getInputCheckbox(key, value) {
+    let arr = data[key]
+    if (arr.includes(value))
+      arr = arr.filter(x => x !== value)
+    else
+      arr.push(value)
+
+    setData({ ...data, [key]: arr })
+    setErrorMessage({ ...errorMessage, [key]: arr.length === 0 ? `Please Select atleast one ${key}` : "" })
+  }
+
   function getInputData(e) {
     let name = e.target.name
-    let value = name === "pic" ? "product/" + e.target.files[0].name : e.target.value
-    // let value = name === "pic" ? e.target.files[0] : e.target.value
+    let value = name === "pic" ? Array.from(e.target.files).map(x => "product/" + x.name) : e.target.value
+    // let value = name === "pic" ? e.target.files : e.target.value
 
-    setData({ ...data, [name]: name === "status" ? value === "1" ? true : false : value })
+    setData({ ...data, [name]: name === "status" || name === "stock" ? value === "1" ? true : false : value })
     setErrorMessage({ ...errorMessage, [name]: name === "pic" ? ImageValidator(e) : TextValidator(e) })
   }
   function postData(e) {
@@ -63,13 +79,47 @@ export default function AdminProductCreatePage() {
     if (error)
       setShow(true)
     else {
+      let bp = parseInt(data.basePrice)
+      let d = parseInt(data.discount)
+      let fp = parseInt(bp - bp * d / 100)
+      let stockQuantity = parseInt(data.stockQuantity)
+
+      dispatch(createProduct({
+        ...data,
+        maincategory: data.maincategory || MaincategoryStateData[0].name,
+        subcategory: data.subcategory || SubcategoryStateData[0].name,
+        brand: data.brand || BrandStateData[0].name,
+        basePrice: bp,
+        discount: d,
+        finalPrice: fp,
+        stockQuantity: stockQuantity,
+        description: rte.getHTMLCode()
+      }))
+
+
       // let formData = new FormData()
-      // formData.append("name",data.name)
-      // formData.append("pic",data.pic)
-      // formData.append("status",data.status)
+      // formData.append("name", data.name)
+      // formData.append("maincategory", data.maincategory || MaincategoryStateData[0].name)
+      // formData.append("subcategory", data.subcategory || SubcategoryStateData[0].name)
+      // formData.append("brand", data.brand || BrandStateData[0].name)
+      // formData.append("basePrice", bp)
+      // formData.append("discount", d)
+      // formData.append("finalPrice", fp)
+      // data.color.forEach(x => {
+      //   formData.append("color", x)
+      // })
+      // data.size.forEach(x => {
+      //   formData.append("size", x)
+      // })
+      // data.pic.forEach(x => {
+      //   formData.append("pic", x)
+      // })
+      // formData.append("stock", data.stock)
+      // formData.append("stocjQuantity", data.stockQuantity)
+      // formData.append("description", rte.getHTMLCode())
+      // formData.append("status", data.status)
       // dispatch(createProduct(formData))
 
-      dispatch(createProduct({ ...data }))
       navigate("/admin/product")
     }
   }
@@ -90,6 +140,13 @@ export default function AdminProductCreatePage() {
       dispatch(getBrand())
     })()
   }, [BrandStateData.length])
+
+  useEffect(() => {
+    (() => {
+      rte = new window.RichTextEditor(refdiv.current);
+      rte.setHTMLCode("")
+    })()
+  }, [])
   return (
     <>
       <Breadcrum title="Admin" />
@@ -112,7 +169,7 @@ export default function AdminProductCreatePage() {
 
                 <div className="col-lg-3 col-md-6 mb-3">
                   <label>Maincategory*</label>
-                  <select name="maincategory" className='form-select border-dark' >
+                  <select name="maincategory" onChange={getInputData} className='form-select border-dark' >
                     {MaincategoryStateData.map((item) => {
                       return <option key={item.id}>{item.name}</option>
                       // return  <option key={item.id} value={item.id}>{item.name}</option>
@@ -122,7 +179,7 @@ export default function AdminProductCreatePage() {
 
                 <div className="col-lg-3 col-md-6 mb-3">
                   <label>Subcategory*</label>
-                  <select name="subcategory" className='form-select border-dark' >
+                  <select name="subcategory" onChange={getInputData} className='form-select border-dark' >
                     {SubcategoryStateData.map((item) => {
                       return <option key={item.id}>{item.name}</option>
                       // return  <option key={item.id} value={item.id}>{item.name}</option>
@@ -132,7 +189,7 @@ export default function AdminProductCreatePage() {
 
                 <div className="col-lg-3 col-md-6 mb-3">
                   <label>Brand*</label>
-                  <select name="brand" className='form-select border-dark' >
+                  <select name="brand" onChange={getInputData} className='form-select border-dark' >
                     {BrandStateData.map((item) => {
                       return <option key={item.id}>{item.name}</option>
                       // return  <option key={item.id} value={item.id}>{item.name}</option>
@@ -142,7 +199,7 @@ export default function AdminProductCreatePage() {
 
                 <div className="col-lg-3 col-md-6 mb-3">
                   <label>Stock*</label>
-                  <select name="stock" className='form-select border-dark' >
+                  <select name="stock" onChange={getInputData} className='form-select border-dark' >
                     <option value="1">In Stock</option>
                     <option value="0">Out Of Stock</option>
                   </select>
@@ -167,11 +224,46 @@ export default function AdminProductCreatePage() {
                   {show && errorMessage.stockQuantity ? <p className='text-capitalize text-danger'>{errorMessage.stockQuantity}</p> : null}
                 </div>
 
+                <div className="col-12 mb-3">
+                  <label>Color*</label>
+                  <div className='row border border-dark p-2 m-1 rounded'>
+                    {colors.map((item, index) => {
+                      return <div className='col-lg-3 col-md-4 col-6' key={index}>
+                        <label htmlFor={item} className='d-inline-block' style={{ width: "30%" }}>{item}</label>
+                        <input type="checkbox" onChange={() => getInputCheckbox('color', item)} checked={data.color.includes(item)} className='ms-2' name={item} id={item} />
+                      </div>
+                    })}
+                  </div>
+                  {show && errorMessage.color ? <p className='text-capitalize text-danger'>{errorMessage.color}</p> : null}
+                </div>
+
+                <div className="col-12 mb-3">
+                  <label>Size*</label>
+                  <div className='row border border-dark p-2 m-1 rounded'>
+                    {sizes.map((item, index) => {
+                      return <div className='col-lg-3 col-md-4 col-6' key={index}>
+                        <label htmlFor={item} className='d-inline-block' style={{ width: "30%" }}>{item}</label>
+                        <input type="checkbox" onChange={() => getInputCheckbox('size', item)} checked={data.size.includes(item)} className='ms-2' name={item} id={item} />
+                      </div>
+                    })}
+                  </div>
+                  {show && errorMessage.color ? <p className='text-capitalize text-danger'>{errorMessage.color}</p> : null}
+                </div>
+
+                <div className="col-12 mb-3">
+                  <label>Description</label>
+                  <div ref={refdiv} className='border border-dark'></div>
+                </div>
+
 
                 <div className="col-md-6 mb-3">
                   <label>Pic*</label>
-                  <input type="file" name="pic" onChange={getInputData} className={`form-control ${show && errorMessage.pic ? 'border-danger' : 'border-dark'}`} />
-                  {show && errorMessage.pic ? <p className='text-capitalize text-danger'>{errorMessage.pic}</p> : null}
+                  <input type="file" name="pic" multiple onChange={getInputData} className={`form-control ${show && errorMessage.pic ? 'border-danger' : 'border-dark'}`} />
+                  {show && errorMessage.pic ?
+                    errorMessage.pic.split("|").map((x, index) => {
+                      return <p className='text-capitalize text-danger' key={index}>{x}</p>
+                    })
+                    : null}
                 </div>
 
                 <div className="col-md-6 mb-3">

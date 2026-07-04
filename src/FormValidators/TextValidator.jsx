@@ -20,6 +20,32 @@ export default function TextValidator(e) {
             else
                 return ""
 
+        case "basePrice":
+            if (!value || value.length === 0)
+                return name + " Field is Mendatory"
+            else if (parseInt(value) < 1)
+                return "Base Price Field Length Must Be More Then 0"
+            else
+                return ""
+
+
+        case "stockQuantity":
+            if (!value || value.length === 0)
+                return name + " Field is Mendatory"
+            else if (parseInt(value) < 0)
+                return "Base Price Field Length Must Be More Then 0 or Equal to 0"
+            else
+                return ""
+
+
+        case "discount":
+            if (!value || value.length === 0)
+                return name + " Field is Mendatory"
+            else if (parseInt(value) < 0 || parseInt(value) > 100)
+                return "Discount Must be 0-100"
+            else
+                return ""
+
         default:
             return ""
     }
