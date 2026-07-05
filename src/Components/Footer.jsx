@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
+import { getSetting } from "../Redux/ActionCreators/SettingActionCreators"
 export default function Footer() {
     let [showMenu, setShowMenu] = useState(false)
     let [settingData, setSettingData] = useState({
@@ -16,6 +18,21 @@ export default function Footer() {
         linkedin: import.meta.env.VITE_APP_LINKEDIN,
         youtube: import.meta.env.VITE_APP_YOUTUBE,
     })
+
+    let SettingStateData = useSelector(state => state.SettingStateData)
+    let dispatch = useDispatch()
+
+    useEffect(() => {
+        (() => {
+            dispatch(getSetting())
+            if (SettingStateData.length) {
+                let item = {}
+                Object.keys(settingData).forEach(key => item[key] = SettingStateData[0][key] || settingData[key])
+                console.log(item)
+                setSettingData({ ...item })
+            }
+        })()
+    }, [SettingStateData.length])
     return (
         <footer id="footer" className="footer dark-background">
 
@@ -48,7 +65,7 @@ export default function Footer() {
                             <li><Link to="/tc">Termss and Conditions</Link></li>
                         </ul>
                     </div>
- 
+
                     <div className="col-lg-5 col-12 footer-contact text-center text-md-start">
                         <h4>Subscribe Our Newsletter Service</h4>
                         <p>Subscribe to our newsletter and stay updated with the latest products, exclusive offers, seasonal discounts, and shopping trends. Join the Cartify community and never miss a great deal.</p>

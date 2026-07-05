@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
+import { getSetting } from "../Redux/ActionCreators/SettingActionCreators"
 export default function Navbar() {
     let [showMenu, setShowMenu] = useState(false)
     let [settingData, setSettingData] = useState({
@@ -16,6 +18,21 @@ export default function Navbar() {
         linkedin: import.meta.env.VITE_APP_LINKEDIN,
         youtube: import.meta.env.VITE_APP_YOUTUBE,
     })
+
+    let SettingStateData = useSelector(state => state.SettingStateData)
+    let dispatch = useDispatch()
+
+    useEffect(() => {
+        (() => {
+            dispatch(getSetting())
+            if (SettingStateData.length) {
+                let item = {}
+                Object.keys(settingData).forEach(key => item[key] = SettingStateData[0][key] || settingData[key])
+                console.log(item)
+                setSettingData({ ...item })
+            }
+        })()
+    }, [SettingStateData.length])
     return (
         <>
             <div className="container">
@@ -23,18 +40,18 @@ export default function Navbar() {
                     <div className="col-9">
                         <ul className='list-unstyled mt-2 d-flex'>
                             <li className="me-3"><Link to={settingData.map1} className='text-dark' target='_blank'><i className='bi bi-geo-alt'></i><span className='d-none d-lg-inline-block ms-2'>{settingData.address}</span></Link></li>
-                            <li className="me-3"><Link to={settingData.map1} className='text-dark' target='_blank'><i className='bi bi-envelope'></i><span className='d-none d-lg-inline-block ms-2'>{settingData.email}</span></Link></li>
-                            <li className="me-3"><Link to={settingData.map1} className='text-dark' target='_blank'><i className='bi bi-telephone'></i><span className='d-none d-lg-inline-block ms-2'>{settingData.phone}</span></Link></li>
-                            <li className="me-3"><Link to={settingData.map1} className='text-dark' target='_blank'><i className='bi bi-whatsapp'></i><span className='d-none d-lg-inline-block ms-2'>{settingData.whatsapp}</span></Link></li>
+                            <li className="me-3"><Link to={`mailto:${settingData.email}`} className='text-dark' target='_blank'><i className='bi bi-envelope'></i><span className='d-none d-lg-inline-block ms-2'>{settingData.email}</span></Link></li>
+                            <li className="me-3"><Link to={`tel:${settingData.phone}`} className='text-dark' target='_blank'><i className='bi bi-telephone'></i><span className='d-none d-lg-inline-block ms-2'>{settingData.phone}</span></Link></li>
+                            <li className="me-3"><Link to={`https://wa.me/${settingData.whatsapp}`} className='text-dark' target='_blank'><i className='bi bi-whatsapp'></i><span className='d-none d-lg-inline-block ms-2'>{settingData.whatsapp}</span></Link></li>
                         </ul>
                     </div>
                     <div className="col-3">
                         <ul className='list-unstyled mt-2 d-flex float-end'>
-                            <li className="me-3"><Link to={settingData.map1} className='text-dark' target='_blank'><i className='bi bi-facebook'></i></Link></li>
-                            <li className="me-3"><Link to={settingData.map1} className='text-dark' target='_blank'><i className='bi bi-twitter'></i></Link></li>
-                            <li className="me-3"><Link to={settingData.map1} className='text-dark' target='_blank'><i className='bi bi-linkedin'></i></Link></li>
-                            <li className="me-3"><Link to={settingData.map1} className='text-dark' target='_blank'><i className='bi bi-instagram'></i></Link></li>
-                            <li className="me-3"><Link to={settingData.map1} className='text-dark' target='_blank'><i className='bi bi-youtube'></i></Link></li>
+                            <li className="me-3"><Link to={settingData.facebook} className='text-dark' target='_blank'><i className='bi bi-facebook'></i></Link></li>
+                            <li className="me-3"><Link to={settingData.twitter} className='text-dark' target='_blank'><i className='bi bi-twitter'></i></Link></li>
+                            <li className="me-3"><Link to={settingData.linkedin} className='text-dark' target='_blank'><i className='bi bi-linkedin'></i></Link></li>
+                            <li className="me-3"><Link to={settingData.instagram} className='text-dark' target='_blank'><i className='bi bi-instagram'></i></Link></li>
+                            <li className="me-3"><Link to={settingData.youtube} className='text-dark' target='_blank'><i className='bi bi-youtube'></i></Link></li>
                         </ul>
                     </div>
                 </div>

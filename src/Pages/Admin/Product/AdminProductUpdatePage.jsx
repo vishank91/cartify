@@ -47,6 +47,7 @@ export default function AdminProductUpdatePage() {
   })
 
   let [show, setShow] = useState(false)
+  let [flag, setFlag] = useState(false)
 
   let navigate = useNavigate()
 
@@ -276,6 +277,20 @@ export default function AdminProductUpdatePage() {
                       return <p className='text-capitalize text-danger' key={index}>{x}</p>
                     })
                     : null}
+                </div>
+
+                <div className="col-md-6 mb-3">
+                  <label>Old Pics(Click on Pic to Remove)</label>
+                  <div>
+                    {data.pic.map((item, index) => {
+                      return <img key={index}
+                        onClick={() => {
+                          data.pic.splice(index, 1)
+                          setFlag(!flag)
+                        }}
+                        src={`${import.meta.env.VITE_APP_IMAGE_SERVER}${item}`} className='m-1' height={60} width={70} />
+                    })}
+                  </div>
                 </div>
 
                 <div className="col-md-6 mb-3">

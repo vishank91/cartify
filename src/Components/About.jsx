@@ -1,13 +1,40 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 import AOS from 'aos';
+
+import { getSetting } from "../Redux/ActionCreators/SettingActionCreators"
 export default function About() {
+    let [settingData, setSettingData] = useState({
+        siteName: import.meta.env.VITE_APP_SITE_NAME,
+        facebook: import.meta.env.VITE_APP_FACEBOOK,
+        twitter: import.meta.env.VITE_APP_TWITTER,
+        instagram: import.meta.env.VITE_APP_INSTAGRM,
+        linkedin: import.meta.env.VITE_APP_LINKEDIN,
+        youtube: import.meta.env.VITE_APP_YOUTUBE,
+    })
+
+    let SettingStateData = useSelector(state => state.SettingStateData)
+    let dispatch = useDispatch()
+
+    useEffect(() => {
+        (() => {
+            dispatch(getSetting())
+            if (SettingStateData.length) {
+                let item = {}
+                Object.keys(settingData).forEach(key => item[key] = SettingStateData[0][key] || settingData[key])
+                console.log(item)
+                setSettingData({ ...item })
+            }
+        })()
+    }, [SettingStateData.length])
+
     useEffect(() => {
         AOS.init({
             duration: 1000,
             once: true,
         });
     }, []);
-
     return (
         <>
             <section id="about" className="about section">
@@ -18,34 +45,31 @@ export default function About() {
 
                         <div className="col-lg-6 position-relative align-self-start order-lg-last order-first" data-aos="fade-up" data-aos-delay="200">
                             <img src="assets/img/about.jpg" className="img-fluid" alt="" />
-                            <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" className="glightbox pulsating-play-btn"></a>
                         </div>
 
                         <div className="col-lg-6 content order-last  order-lg-first" data-aos="fade-up" data-aos-delay="100">
                             <h3>About Us</h3>
-                            <p>
-                                Dolor iure expedita id fuga asperiores qui sunt consequatur minima. Quidem voluptas deleniti. Sit quia molestiae quia quas qui magnam itaque veritatis dolores. Corrupti totam ut eius incidunt reiciendis veritatis asperiores placeat.
-                            </p>
+                            <p>Cartify is your trusted online shopping destination, offering quality products, secure payments, and fast delivery. We are committed to providing a seamless shopping experience with exceptional customer service, affordable prices, and products that meet your everyday lifestyle needs.</p>
                             <ul>
                                 <li>
-                                    <i className="bi bi-diagram-3"></i>
+                                   <i class="bi bi-grid-3x3-gap"></i>
                                     <div>
-                                        <h5>Ullamco laboris nisi ut aliquip consequat</h5>
-                                        <p>Magni facilis facilis repellendus cum excepturi quaerat praesentium libre trade</p>
+                                        <h5>Wide Product Collection</h5>
+                                        <p>Browse thousands of carefully selected products across multiple categories, ensuring quality, affordability, and variety for every customer.</p>
                                     </div>
                                 </li>
                                 <li>
-                                    <i className="bi bi-fullscreen-exit"></i>
+                                    <i class="bi bi-shield-check"></i>
                                     <div>
-                                        <h5>Magnam soluta odio exercitationem reprehenderi</h5>
-                                        <p>Quo totam dolorum at pariatur aut distinctio dolorum laudantium illo direna pasata redi</p>
+                                        <h5>Secure & Easy Shopping</h5>
+                                        <p>Shop confidently with encrypted payments, a user-friendly interface, and a smooth checkout process designed for convenience.</p>
                                     </div>
                                 </li>
                                 <li>
-                                    <i className="bi bi-broadcast"></i>
+                                   <i class="bi bi-truck"></i>
                                     <div>
-                                        <h5>Voluptatem et qui exercitationem</h5>
-                                        <p>Et velit et eos maiores est tempora et quos dolorem autem tempora incidunt maxime veniam</p>
+                                        <h5>Fast & Reliable Delivery</h5>
+                                        <p>Receive your orders quickly through trusted delivery partners with real-time tracking and dependable customer support throughout the journey.</p>
                                     </div>
                                 </li>
                             </ul>
