@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import AOS from 'aos';
-export default function Products() {
+import { Link } from 'react-router-dom';
+export default function Products({ maincategory, data }) {
+    let [selected, setSelected] = useState("")
     useEffect(() => {
         AOS.init({
             duration: 1000,
@@ -8,77 +10,40 @@ export default function Products() {
         });
     }, []);
     return (
-        <section id="services" class="services section">
+        <section id="services" className="services section">
 
-            <div class="container section-title" data-aos="fade-up">
-                <span>Our Services<br /></span>
-                <h2>Our ServiceS</h2>
-                <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+            <div className="container section-title" data-aos="fade-up">
+                <span>Our Latest Products<br /></span>
+                <h2>Our Latest Prducts</h2>
+                <div className='btn-group'>
+                    <button className={selected === "" ? 'btn btn-primary' : 'btn btn-light'} onClick={() => setSelected("")}>All</button>
+                    {maincategory.map((item, index) => {
+                        return <button key={index} onClick={() => setSelected(item.name)} className={selected === item.name ? 'btn btn-primary' : 'btn btn-light'}>{item.name}</button>
+                    })}
+                </div>
             </div>
 
-            <div class="container">
+            <div className="container">
 
-                <div class="row gy-4">
+                <div className="row gy-4">
 
-                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                        <div class="card">
-                            <div class="card-img">
-                                <img src="assets/img/service-1.jpg" alt="" class="img-fluid" />
+                    {data.filter(x => selected === "" || x.maincategory === selected).slice(0, 24).map((item, index) => {
+                        return <div className="col-lg-4 col-md-6" key={index}>
+                            <div className="card">
+                                <div className="card-img">
+                                    <img src={`${import.meta.env.VITE_APP_IMAGE_SERVER}${item.pic[0]}`} style={{ height: 300 }} alt="" className="w-100" />
+                                </div>
+                                <h3 className='text-center' style={{ height: 50 }}>{item.name}</h3>
+                                <h6 className='text-center'><del>&#8377;{item.basePrice}</del> &#8377;{item.finalPrice} <sup>{item.discount}% Off</sup></h6>
+                                <div className='btn-group w-100'>
+                                    <button disabled className='btn btn-secondary'>{item.brand}</button>
+                                    <button disabled className='btn btn-success'>{item.stock ? `${item.stockQuantity} Left IN Stock` : 'Out Of Stock'}</button>
+                                    <Link to={`/product/${item.id}`} className='btn btn-primary text-light'><i className='bi bi-cart-plus'></i> Add to Cart</Link>
+                                </div>
                             </div>
-                            <h3>Storage</h3>
-                            <p>Cumque eos in qui numquam. Aut aspernatur perferendis sed atque quia voluptas quisquam repellendus temporibus itaqueofficiis odit</p>
                         </div>
-                    </div>
 
-                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
-                        <div class="card">
-                            <div class="card-img">
-                                <img src="assets/img/service-2.jpg" alt="" class="img-fluid" />
-                            </div>
-                            <h3><a href="#" class="stretched-link">Logistics</a></h3>
-                            <p>Asperiores provident dolor accusamus pariatur dolore nam id audantium ut et iure incidunt molestiae dolor ipsam ducimus occaecati nisi</p>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
-                        <div class="card">
-                            <div class="card-img">
-                                <img src="assets/img/service-3.jpg" alt="" class="img-fluid" />
-                            </div>
-                            <h3><a href="#" class="stretched-link">Cargo</a></h3>
-                            <p>Dicta quam similique quia architecto eos nisi aut ratione aut ipsum reiciendis sit doloremque oluptatem aut et molestiae ut et nihil</p>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
-                        <div class="card">
-                            <div class="card-img">
-                                <img src="assets/img/service-4.jpg" alt="" class="img-fluid" />
-                            </div>
-                            <h3><a href="#" class="stretched-link">Trucking</a></h3>
-                            <p>Dicta quam similique quia architecto eos nisi aut ratione aut ipsum reiciendis sit doloremque oluptatem aut et molestiae ut et nihil</p>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
-                        <div class="card">
-                            <div class="card-img">
-                                <img src="assets/img/service-5.jpg" alt="" class="img-fluid" />
-                            </div>
-                            <h3>Packaging</h3>
-                            <p>Illo consequuntur quisquam delectus praesentium modi dignissimos facere vel cum onsequuntur maiores beatae consequatur magni voluptates</p>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
-                        <div class="card">
-                            <div class="card-img">
-                                <img src="assets/img/service-6.jpg" alt="" class="img-fluid" />
-                            </div>
-                            <h3><a href="#" class="stretched-link">Warehousing</a></h3>
-                            <p>Quas assumenda non occaecati molestiae. In aut earum sed natus eatae in vero. Ab modi quisquam aut nostrum unde et qui est non quo nulla</p>
-                        </div>
-                    </div>
+                    })}
 
                 </div>
 

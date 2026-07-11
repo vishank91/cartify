@@ -28,7 +28,6 @@ export default function Footer() {
             if (SettingStateData.length) {
                 let item = {}
                 Object.keys(settingData).forEach(key => item[key] = SettingStateData[0][key] || settingData[key])
-                console.log(item)
                 setSettingData({ ...item })
             }
         })()

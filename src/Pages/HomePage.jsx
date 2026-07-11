@@ -9,12 +9,19 @@ import Testimonial from '../Components/Testimonial'
 import FAQ from '../Components/FAQ'
 
 import { getSetting } from "../Redux/ActionCreators/SettingActionCreators"
+import { getProduct } from "../Redux/ActionCreators/ProductActionCreators"
+import { getMaincategory } from "../Redux/ActionCreators/MaincategoryActionCreators"
 export default function HomePage() {
+    let [data, setData] = useState([])
+    let [maincategory, setMaincategory] = useState([])
+
     let [settingData, setSettingData] = useState({
         siteName: import.meta.env.VITE_APP_SITE_NAME,
     })
 
     let SettingStateData = useSelector(state => state.SettingStateData)
+    let ProductStateData = useSelector(state => state.ProductStateData)
+    let MaincategoryStateData = useSelector(state => state.MaincategoryStateData)
     let dispatch = useDispatch()
 
     useEffect(() => {
@@ -23,11 +30,26 @@ export default function HomePage() {
             if (SettingStateData.length) {
                 let item = {}
                 Object.keys(settingData).forEach(key => item[key] = SettingStateData[0][key] || settingData[key])
-                console.log(item)
                 setSettingData({ ...item })
             }
         })()
     }, [SettingStateData.length])
+
+    useEffect(() => {
+        (() => {
+            dispatch(getProduct())
+            if (ProductStateData.length)
+                setData(ProductStateData.filter(x => x.status))
+        })()
+    }, [ProductStateData.length])
+
+    useEffect(() => {
+        (() => {
+            dispatch(getMaincategory())
+            if (MaincategoryStateData.length)
+                setMaincategory(MaincategoryStateData.filter(x => x.status))
+        })()
+    }, [MaincategoryStateData.length])
     return (
         <>
             <section id="hero" className="hero section dark-background">
@@ -89,7 +111,7 @@ export default function HomePage() {
             </section>
             <Feature />
             <About />
-            <Products />
+            <Products maincategory={maincategory} data={data} />
             <CTA />
             <FAQ />
             <Testimonial />
