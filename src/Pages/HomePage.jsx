@@ -11,6 +11,7 @@ import FAQ from '../Components/FAQ'
 import { getSetting } from "../Redux/ActionCreators/SettingActionCreators"
 import { getProduct } from "../Redux/ActionCreators/ProductActionCreators"
 import { getMaincategory } from "../Redux/ActionCreators/MaincategoryActionCreators"
+import ProductSlider from '../Components/ProductSlider'
 export default function HomePage() {
     let [data, setData] = useState([])
     let [maincategory, setMaincategory] = useState([])
@@ -113,6 +114,9 @@ export default function HomePage() {
             <About />
             <Products maincategory={maincategory} data={data} />
             <CTA />
+            {maincategory.map(item=>{
+                return <ProductSlider title={item.name} data={ProductStateData.filter(x=>x.maincategory===item.name)}/>
+            })}
             <FAQ />
             <Testimonial />
         </>

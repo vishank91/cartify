@@ -7,16 +7,16 @@ import { Autoplay, Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 
-export default function Testimonial() {
-    let sliderOptions = {
-        navigation: true,
-        modules: [Navigation, Autoplay],
-        loop: true,
-        autoplay: {
-            delay: 2000,
-            disableOnInteraction: false,
-        }
+let sliderOptions = {
+    navigation: true,
+    modules: [Navigation, Autoplay],
+    loop: true,
+    autoplay: {
+        delay: 2000,
+        disableOnInteraction: false,
     }
+}
+export default function Testimonial() {
     useEffect(() => {
         AOS.init({
             duration: 1000,

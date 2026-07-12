@@ -20,29 +20,29 @@ export default function Stats() {
 
                         <div className="col-lg-3 col-md-6">
                             <div className="stats-item text-center w-100 h-100">
-                                <span data-purecounter-start="0" data-purecounter-end="232" data-purecounter-duration="1" className="purecounter"></span>
-                                <p>Clients</p>
+                                <span data-purecounter-start="0" data-purecounter-end="1000" data-purecounter-duration="1" className="purecounter"></span>
+                                <p>Happy Customers</p>
                             </div>
                         </div>
 
                         <div className="col-lg-3 col-md-6">
                             <div className="stats-item text-center w-100 h-100">
-                                <span data-purecounter-start="0" data-purecounter-end="521" data-purecounter-duration="1" className="purecounter"></span>
-                                <p>Projects</p>
+                                <span data-purecounter-start="0" data-purecounter-end="100" data-purecounter-duration="1" className="purecounter"></span>
+                                <p>Products</p>
                             </div>
                         </div>
 
                         <div className="col-lg-3 col-md-6">
                             <div className="stats-item text-center w-100 h-100">
-                                <span data-purecounter-start="0" data-purecounter-end="1453" data-purecounter-duration="1" className="purecounter"></span>
-                                <p>Hours Of Support</p>
+                                <span data-purecounter-start="0" data-purecounter-end="20" data-purecounter-duration="1" className="purecounter"></span>
+                                <p>Brands</p>
                             </div>
                         </div>
 
                         <div className="col-lg-3 col-md-6">
                             <div className="stats-item text-center w-100 h-100">
-                                <span data-purecounter-start="0" data-purecounter-end="32" data-purecounter-duration="1" className="purecounter"></span>
-                                <p>Workers</p>
+                                <span data-purecounter-start="0" data-purecounter-end="15" data-purecounter-duration="1" className="purecounter"></span>
+                                <p>Days Refund Policy</p>
                             </div>
                         </div>
 

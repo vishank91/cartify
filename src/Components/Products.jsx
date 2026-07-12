@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import AOS from 'aos';
-import { Link } from 'react-router-dom';
+import SingleProduct from './SingleProduct';
 export default function Products({ maincategory, data }) {
     let [selected, setSelected] = useState("")
     useEffect(() => {
@@ -29,18 +29,7 @@ export default function Products({ maincategory, data }) {
 
                     {data.filter(x => selected === "" || x.maincategory === selected).slice(0, 24).map((item, index) => {
                         return <div className="col-lg-4 col-md-6" key={index}>
-                            <div className="card">
-                                <div className="card-img">
-                                    <img src={`${import.meta.env.VITE_APP_IMAGE_SERVER}${item.pic[0]}`} style={{ height: 300 }} alt="" className="w-100" />
-                                </div>
-                                <h3 className='text-center' style={{ height: 50 }}>{item.name}</h3>
-                                <h6 className='text-center'><del>&#8377;{item.basePrice}</del> &#8377;{item.finalPrice} <sup>{item.discount}% Off</sup></h6>
-                                <div className='btn-group w-100'>
-                                    <button disabled className='btn btn-secondary'>{item.brand}</button>
-                                    <button disabled className='btn btn-success'>{item.stock ? `${item.stockQuantity} Left IN Stock` : 'Out Of Stock'}</button>
-                                    <Link to={`/product/${item.id}`} className='btn btn-primary text-light'><i className='bi bi-cart-plus'></i> Add to Cart</Link>
-                                </div>
-                            </div>
+                            <SingleProduct item={item} />
                         </div>
 
                     })}
