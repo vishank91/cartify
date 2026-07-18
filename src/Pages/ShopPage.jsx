@@ -19,6 +19,8 @@ export default function ShopPage() {
     color: [],
     size: [],
   })
+  let [sortFilter, setSortFilter] = useState("Latest")
+  let [search, setSearch] = useState("")
 
   let MaincategoryStateData = useSelector(state => state.MaincategoryStateData)
   let SubcategoryStateData = useSelector(state => state.SubcategoryStateData)
@@ -38,6 +40,7 @@ export default function ShopPage() {
     applyFilter({ ...filter, [key]: arr })
   }
 
+
   function applyFilter(filter) {
     let items = ProductStateData.filter(x => x.status && (
       (filter.maincategory.length === 0 || filter.maincategory.includes(x.maincategory)) &&
@@ -46,7 +49,31 @@ export default function ShopPage() {
       (filter.color.length === 0 || new Set(filter.color).intersection(new Set(x.color)).size > 0) &&
       (filter.size.length === 0 || new Set(filter.size).intersection(new Set(x.size)).size > 0)
     ))
-    setData(items)
+    applySortFilter(sortFilter, items)
+  }
+
+  function applySearchFilter(search) {
+    let ch = search.toLocaleLowerCase()
+    let items = ProductStateData.filter(x => x.status && (
+      (x.name?.toLocaleLowerCase().includes(ch)) ||
+      (x.maincategory?.toLocaleLowerCase() === ch) ||
+      (x.subcategory?.toLocaleLowerCase() === ch) ||
+      (x.brand?.toLocaleLowerCase() === ch) ||
+      (x.color?.find(x => x.toLocaleLowerCase() === ch))
+    ))
+    applySortFilter(sortFilter, items)
+  }
+
+  function applySortFilter(filter, data) {
+    if (filter === "Latest")
+      data = data.sort((x, y) => y.id.localeCompare(x.id))
+    else if (filter === "Price : Low to High")
+      data = data.sort((x, y) => x.finalPrice - y.finalPrice)
+    else
+      data = data.sort((x, y) => y.finalPrice - x.finalPrice)
+
+    setData(data)
+    setSortFilter(filter)
   }
 
   useEffect(() => {
@@ -96,18 +123,39 @@ export default function ShopPage() {
             </ul>
             <ul className="list-group mb-3">
               <li className="list-group-item active" aria-disabled="true">Color</li>
-              {colors.map((item,index) => {
+              {colors.map((item, index) => {
                 return <li key={index} onClick={() => getFilterSelect('color', item)} className="list-group-item">{item} {filter.color.includes(item) ? <i className='bi bi-check float-end'></i> : null}</li>
               })}
             </ul>
             <ul className="list-group mb-3">
               <li className="list-group-item active" aria-disabled="true">Size</li>
-              {sizes.map((item,index) => {
+              {sizes.map((item, index) => {
                 return <li key={index} onClick={() => getFilterSelect('size', item)} className="list-group-item">{item} {filter.size.includes(item) ? <i className='bi bi-check float-end'></i> : null}</li>
               })}
             </ul>
           </div>
           <div className="col-md-9">
+            <div className="row">
+              <div className="col-md-8 mb-3">
+                <form onSubmit={(e) => {
+                  e.preventDefault()
+                  applySearchFilter(search)
+                }}>
+                  <div className="btn-group w-100">
+                    <input type="search" name="search" value={search} onChange={(e) => setSearch(e.target.value)} placeholder='Search Products By Name, Category, Brand and Color Etc' className='form-control border-primary' />
+                    <button type="submit" className='btn btn-primary'>Search</button>
+                  </div>
+                </form>
+              </div>
+              <div className="col-md-4 mb-3">
+                <select className='form-select border-primary' onChange={(e) => applySortFilter(e.target.value, data)}>
+                  <option>Latest</option>
+                  <option>Price : Low to High</option>
+                  <option>Price : High to Low</option>
+                </select>
+              </div>
+            </div>
+
             <div className="row">
               {data.map(item => {
                 return <div className='col-xl-4 col-sm-6' key={item.id}>

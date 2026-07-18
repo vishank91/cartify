@@ -34,8 +34,8 @@ export default function ProductSlider({ title, data }) {
     return (
         <section id="featured-services" className="featured-services section">
             <div className="container section-title" data-aos="fade-up">
-                <span>Our Lastest Products For {title}</span>
-                <h2>Our Lastest Products For {title}</h2>
+                <span>{title === "Related Products" ? title : `Latest Prodicts for ${title}`}</span>
+                <h2>{title === "Related Products" ? title : `Latest Prodicts for ${title}`}</h2>
             </div>
             <div className="container">
                 <Swiper {...sliderOptions}>
