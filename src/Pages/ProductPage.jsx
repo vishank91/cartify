@@ -60,7 +60,7 @@ export default function ProductPage() {
                     window.history.back()
             }
         })()
-    }, [ProductStateData.length,id])
+    }, [ProductStateData.length, id])
     return (
         <>
             <Breadcrum title={data.name ?? ""} />
@@ -125,9 +125,9 @@ export default function ProductPage() {
                                         <div className="row">
                                             <div className="col-lg-4 col-5">
                                                 <div className="btn-group w-100">
-                                                    <button className='btn btn-primary'><i className='bi bi-dash'></i></button>
+                                                    <button className='btn btn-primary' onClick={() => selected.quantity > 1 ? setSelected({ ...selected, quantity: selected.quantity - 1 }) : null}><i className='bi bi-dash'></i></button>
                                                     <h3 className='w-50 text-center'>{selected.quantity}</h3>
-                                                    <button className='btn btn-primary'><i className='bi bi-plus'></i></button>
+                                                    <button className='btn btn-primary' onClick={() => selected.quantity < data.stockQuantity ? setSelected({ ...selected, quantity: selected.quantity + 1 }) : null}><i className='bi bi-plus'></i></button>
                                                 </div>
                                             </div>
                                             <div className="col-lg-8 col-7">

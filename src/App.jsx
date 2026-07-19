@@ -42,6 +42,7 @@ import AdminProductPage from './Pages/Admin/Product/AdminProductPage'
 import AdminProductCreatePage from './Pages/Admin/Product/AdminProductCreatePage'
 import AdminProductUpdatePage from './Pages/Admin/Product/AdminProductUpdatePage'
 import ProductPage from './Pages/ProductPage'
+import SignupPage from './Pages/User/SignupPage'
 
 export default function App() {
   return (
@@ -58,6 +59,8 @@ export default function App() {
         <Route path="/contact" element={<ContactUsPage />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/tc" element={<TermsAndCondition />} />
+
+        <Route path="/signup" element={<SignupPage />} />
 
 
         {/* Admin Routes */}
