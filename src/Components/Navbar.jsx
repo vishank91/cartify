@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import { getSetting } from "../Redux/ActionCreators/SettingActionCreators"
 export default function Navbar() {
@@ -21,6 +21,12 @@ export default function Navbar() {
 
     let SettingStateData = useSelector(state => state.SettingStateData)
     let dispatch = useDispatch()
+    let navigate = useNavigate()
+
+    function logout(){
+        localStorage.clear()
+        navigate("/login")
+    }
 
     useEffect(() => {
         (() => {
@@ -72,17 +78,21 @@ export default function Navbar() {
                             <li><Link to="/faq">Faq</Link></li>
                             <li><Link to="/contact">Contact</Link></li>
                             <li><Link to="/admin">Admin</Link></li>
-                            <li className="dropdown"><a href="#"><span>Nitin Chahan</span> <i className="bi bi-chevron-down toggle-dropdown"></i></a>
-                                <ul>
-                                    <li><Link to="/profile?choice=Profile">Profile</Link></li>
-                                    <li><Link to="/profile?choice=Orders">Order</Link></li>
-                                    <li><Link to="/profile?choice=Wishlist">Wishlist</Link></li>
-                                    <li><Link to="/profile?choice=Address">Address</Link></li>
-                                    <li><Link to="/cart">Cart</Link></li>
-                                    <li><Link to="/checkout">Checkout</Link></li>
-                                    <li><button className='btn btn-light ms-2'>Logout</button></li>
-                                </ul>
-                            </li>
+                            {localStorage.getItem("login") ?
+                                <li className="dropdown"><a href="#"><span>{localStorage.getItem("name")}</span> <i className="bi bi-chevron-down toggle-dropdown"></i></a>
+                                    <ul>
+                                        <li><Link to="/profile?option=Profile">Profile</Link></li>
+                                        {localStorage.getItem("role") !== "Buyer" ? <li><Link to="/admin">Admin Dashboard</Link></li> : null}
+                                        <li><Link to="/profile?option=Orders">Order</Link></li>
+                                        <li><Link to="/profile?option=Wishlist">Wishlist</Link></li>
+                                        <li><Link to="/profile?option=Address">Address</Link></li>
+                                        <li><Link to="/cart">Cart</Link></li>
+                                        <li><Link to="/checkout">Checkout</Link></li>
+                                        <li><button className='btn btn-light ms-2' onClick={logout}>Logout</button></li>
+                                    </ul>
+                                </li> :
+                                <li><Link to="/login">Login</Link></li>
+                            }
                         </ul>
                         <i className={`mobile-nav-toggle d-xl-none bi ${showMenu ? 'bi-x' : 'bi-list'}`} onClick={() => setShowMenu(!showMenu)}></i>
                     </nav>

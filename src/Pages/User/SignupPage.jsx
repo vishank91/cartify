@@ -97,31 +97,31 @@ export default function SignupPage() {
 
                                 <div className="col-md-6 mb-3">
                                     <label>Phone Number*</label>
-                                    <input type="text" name="phone" onChange={getInputData} placeholder='Phone Number' className={`form-control ${show && errorMessage.name ? 'border-danger' : 'border-primary'}`} />
+                                    <input type="text" name="phone" onChange={getInputData} placeholder='Phone Number' className={`form-control ${show && errorMessage.phone ? 'border-danger' : 'border-primary'}`} />
                                     {show && errorMessage.phone ? <p className='text-danger'>{errorMessage.phone}</p> : null}
                                 </div>
 
                                 <div className="col-md-6 mb-3">
                                     <label>UserName*</label>
-                                    <input type="text" name="username" onChange={getInputData} placeholder='UserName' className={`form-control ${show && errorMessage.name ? 'border-danger' : 'border-primary'}`} />
+                                    <input type="text" name="username" onChange={getInputData} placeholder='UserName' className={`form-control ${show && errorMessage.username ? 'border-danger' : 'border-primary'}`} />
                                     {show && errorMessage.username ? <p className='text-danger'>{errorMessage.username}</p> : null}
                                 </div>
 
                                 <div className="col-md-6 mb-3">
                                     <label>Email Address*</label>
-                                    <input type="email" name="email" onChange={getInputData} placeholder='Email Address' className={`form-control ${show && errorMessage.name ? 'border-danger' : 'border-primary'}`} />
+                                    <input type="email" name="email" onChange={getInputData} placeholder='Email Address' className={`form-control ${show && errorMessage.email ? 'border-danger' : 'border-primary'}`} />
                                     {show && errorMessage.email ? <p className='text-danger'>{errorMessage.email}</p> : null}
                                 </div>
 
                                 <div className="col-md-6 mb-3">
                                     <label>Password*</label>
-                                    <input type="password" name="password" onChange={getInputData} placeholder='Password' className={`form-control ${show && errorMessage.name ? 'border-danger' : 'border-primary'}`} />
+                                    <input type="password" name="password" onChange={getInputData} placeholder='Password' className={`form-control ${show && errorMessage.password ? 'border-danger' : 'border-primary'}`} />
                                     {show && errorMessage.password ? <p className='text-danger'>{errorMessage.password}</p> : null}
                                 </div>
 
                                 <div className="col-md-6 mb-3">
                                     <label>Confirm Password*</label>
-                                    <input type="password" name="cpassword" onChange={getInputData} placeholder='Confirm Password' className={`form-control ${show && errorMessage.name ? 'border-danger' : 'border-primary'}`} />
+                                    <input type="password" name="cpassword" onChange={getInputData} placeholder='Confirm Password' className={`form-control ${show && errorMessage.pasword ? 'border-danger' : 'border-primary'}`} />
                                 </div>
 
                                 <div className="col-12 mb-3">
