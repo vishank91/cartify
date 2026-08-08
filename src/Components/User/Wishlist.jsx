@@ -64,8 +64,8 @@ export default function Wishlist() {
           </table>
         </div> :
         <div className='card p-5 text-center'>
-            <h4>No Items in Wishlist</h4>
-            <Link className='btn btn-primary w-25 m-auto'>Shop Now</Link>
+          <h4>No Items in Wishlist</h4>
+          <Link className='btn btn-primary w-25 m-auto' to="/shop">Shop Now</Link>
         </div>}
     </>
   )

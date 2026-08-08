@@ -146,7 +146,7 @@ export default function CartPage() {
                     </> :
                     <div className='card p-5 text-center'>
                         <h4>No Items in Cart</h4>
-                        <Link className='btn btn-primary w-25 m-auto'>Shop Now</Link>
+                        <Link className='btn btn-primary w-25 m-auto' to="/shop">Shop Now</Link>
                     </div>}
             </div>
         </>
